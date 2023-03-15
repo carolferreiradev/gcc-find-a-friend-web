@@ -8,7 +8,7 @@ export default createGlobalStyle`
   }
 
   body {
-    color: #FFFFFF;
+    color:${(props) => props.theme.palette.text} ;
   }
 
   button {

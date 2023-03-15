@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Container } from './styles'
 
 export function Home() {
@@ -13,5 +14,9 @@ export function Home() {
     // TO DO
   }
 
-  return <Container>{/* COMECE POR AQUI */}</Container>
+  return (
+    <Container>
+      <h1>Hello world</h1>
+    </Container>
+  )
 }
