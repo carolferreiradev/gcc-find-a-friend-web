@@ -7,4 +7,10 @@ export const defaultTheme: DefaultTheme = {
     tertiary: '#F4D35E',
     text: '#FFFFFF',
   },
+  typography: {
+    xLarger: '4.5rem', // 72px
+    xMedium: '1.5rem', // 24px
+    medium: '1.25rem', // 20px
+    normal: '1rem', // 16px
+  },
 }
