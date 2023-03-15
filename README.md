@@ -2,7 +2,7 @@
 ## Green Chain Challenge - FindAFriend
 O Green Chain Challenge é um projeto oferecido pela <a href="https://www.rocketseat.com.br/">Rocketseat</a> para a comunidade com desafios que simulam situações reais do mercado de trabalho.
 
-![cover]()
+![cover](https://github.com/carolferreiradev/gcc-find-a-friend-web/blob/main/public/cover.png)
 
 ### Descrição do projeto baseada em uma empresa fictícia
 
