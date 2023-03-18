@@ -27,11 +27,11 @@ Ao entrar na aplicação, a pessoa adotante pode filtrar os bichinhos de acordo 
 
 Após seguir os passos contidos no link da documentação do Backend, clone esse repositório. 
 
-Instale as dependencias:
+Instale as dependências:
 ```json
 npm i
 ```
-e rode o projeto
+e rode o projeto:
 ```json
-com npm run dev
+npm run dev
 ```
