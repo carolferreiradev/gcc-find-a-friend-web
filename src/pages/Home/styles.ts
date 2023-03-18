@@ -123,7 +123,7 @@ export const Footer = styled.footer`
     }
 
     .selectState {
-      width: 80px;
+      width: 125px;
     }
     .selectCity {
       background: #e44449;

@@ -1,8 +1,10 @@
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select } from '@/components/Select'
 import { cityList, statesList } from '@/services'
 import { toast } from 'react-toastify'
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import logoImg from '@/assets/icons/logo.svg'
+import bannerImg from '@/assets/icons/banner.svg'
 import { Container, Content, Banner, Footer, Header, Logo } from './styles'
 
 interface StatesProps {
@@ -34,7 +36,7 @@ export function Home() {
       toast.warning('Estado e cidade são obrigatórios')
       return
     }
-    navigate('/map')
+    navigate(`/map?state=${state.current}&city=${city.current}`)
   }
 
   async function handleChangeState(value: string) {
@@ -48,7 +50,7 @@ export function Home() {
         }
       })
       setListCity(citys)
-    } catch {
+    } catch (error) {
       setListCity([])
       toast.error('Ocorreu um erro ao listar as cidades!')
     }
@@ -80,13 +82,13 @@ export function Home() {
       <Content>
         <Header>
           <Logo>
-            <img src="src/assets/icons/logo.svg" alt="" />
+            <img src={logoImg} alt="" />
           </Logo>
         </Header>
 
         <Banner>
           <h1>Leve a felicidade para o seu lar</h1>
-          <img src="src/assets/icons/banner.svg" alt="" />
+          <img src={bannerImg} alt="Cães sorrindo" />
         </Banner>
 
         <Footer>
