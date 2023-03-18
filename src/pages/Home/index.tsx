@@ -40,7 +40,7 @@ export function Home() {
   async function handleChangeState(value: string) {
     try {
       state.current = value
-      const response = await cityList('value')
+      const response = await cityList(value)
       const citys = response.citys.map((city: CityProps) => {
         return {
           value: city.code,

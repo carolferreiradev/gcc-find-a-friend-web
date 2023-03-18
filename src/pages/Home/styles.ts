@@ -7,6 +7,10 @@ export const Container = styled.div`
   padding: 4rem 6rem;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 1270px) {
+    padding: 2rem;
+  }
 `
 
 export const Content = styled.div`
@@ -21,7 +25,14 @@ export const Header = styled.header`
   margin-bottom: 13px;
 `
 
-export const Logo = styled.div``
+export const Logo = styled.div`
+  @media (max-width: 650px) {
+    img {
+      width: 50%;
+      height: 50%;
+    }
+  }
+`
 
 export const Banner = styled.section`
   display: flex;
@@ -35,6 +46,34 @@ export const Banner = styled.section`
     letter-spacing: -0.02em;
     line-height: 90%;
     font-weight: 800;
+  }
+
+  @media (max-width: 1200px) {
+    flex-direction: column-reverse;
+    align-items: center;
+
+    h1 {
+      margin-top: 1rem;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  @media (max-width: 900px) {
+    margin-bottom: 3rem;
+    img {
+      width: 60%;
+      height: 60%;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+    }
+  }
+  @media (max-width: 650px) {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2rem;
+    }
   }
 `
 
@@ -89,6 +128,44 @@ export const Footer = styled.footer`
     .selectCity {
       background: #e44449;
       width: 280px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 650px) {
+    p {
+      font-size: ${(props) => props.theme.typography.normal};
+      line-height: 24px;
+    }
+    form {
+      margin-top: 2rem;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+
+      .selectState {
+        width: 100%;
+      }
+      .selectCity {
+        width: 100%;
+      }
+
+      button {
+        align-self: self-end;
+      }
+
+      > div {
+        width: 100%;
+      }
     }
   }
 `
