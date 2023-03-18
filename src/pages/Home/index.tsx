@@ -1,30 +1,79 @@
-/* eslint-disable no-unused-vars */
-import { FormEvent } from 'react'
-import {
-  Container,
-  Content,
-  Banner,
-  Footer,
-  Header,
-  Logo,
-  SelectCity,
-  SelectState,
-} from './styles'
+import { useNavigate } from 'react-router-dom'
+import { Select } from '@/components/Select'
+import { cityList, statesList } from '@/services'
+import { toast } from 'react-toastify'
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { Container, Content, Banner, Footer, Header, Logo } from './styles'
+
+interface StatesProps {
+  id: number
+  nome: string
+  sigla: string
+}
+interface CityProps {
+  code: string
+  name: string
+}
+
+interface SelectOptionsProps {
+  value: number | string
+  label: string
+}
 
 export function Home() {
+  const navigate = useNavigate()
+  const [listStates, setListStates] = useState<SelectOptionsProps[]>([])
+  const [listCity, setListCity] = useState<SelectOptionsProps[]>([])
+
+  const state = useRef<string | null>(null)
+  const city = useRef<string | null>(null)
+
   function handleSearchPets(event: FormEvent) {
     event.preventDefault()
-    console.log('handleSearchPets')
-    // TO DO
+    if (!state.current || !city.current) {
+      toast.warning('Estado e cidade são obrigatórios')
+      return
+    }
+    navigate('/map')
   }
 
-  function handleChangeState() {
-    // TO DO
+  async function handleChangeState(value: string) {
+    try {
+      state.current = value
+      const response = await cityList('value')
+      const citys = response.citys.map((city: CityProps) => {
+        return {
+          value: city.code,
+          label: city.name,
+        }
+      })
+      setListCity(citys)
+    } catch {
+      setListCity([])
+      toast.error('Ocorreu um erro ao listar as cidades!')
+    }
   }
 
-  function handleChangeCity() {
-    // TO DO
+  function handleChangeCity(value: string) {
+    city.current = value
   }
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await statesList()
+        const states = response.states.map((state: StatesProps) => {
+          return {
+            value: state.sigla,
+            label: state.sigla,
+          }
+        })
+        setListStates(states)
+      } catch {
+        toast.error('Ocorreu um erro ao listar os estados!')
+      }
+    })()
+  }, [])
 
   return (
     <Container>
@@ -45,12 +94,26 @@ export function Home() {
 
           <form onSubmit={handleSearchPets}>
             <span>Busque um amigo:</span>
-            <SelectState>
-              <option value="1">PE</option>
-            </SelectState>
-            <SelectCity>
-              <option value="1">Recife</option>
-            </SelectCity>
+            <Select
+              name="states"
+              className="selectState"
+              label=""
+              options={listStates}
+              onChange={(value: ChangeEvent<HTMLInputElement>) =>
+                handleChangeState(value.target.value)
+              }
+            />
+            <Select
+              disabled={!state.current}
+              name="city"
+              className="selectCity"
+              label=""
+              options={listCity}
+              onChange={(value: ChangeEvent<HTMLInputElement>) =>
+                handleChangeCity(value.target.value)
+              }
+            />
+
             <button type="submit" aria-label="Pesquisar">
               <img src="src/assets/icons/search.svg" alt="" />
             </button>

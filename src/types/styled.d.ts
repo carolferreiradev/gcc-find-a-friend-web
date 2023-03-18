@@ -4,6 +4,7 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     palette: {
       primary: string
+      primary500: string
       secondary: string
       tertiary: string
       text: string

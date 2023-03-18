@@ -51,8 +51,10 @@ export const Footer = styled.footer`
   }
 
   form {
+    gap: 1rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     span: {
       font-size: ${(props) => props.theme.typography.normal};
       line-height: 34px;
@@ -60,19 +62,33 @@ export const Footer = styled.footer`
     }
 
     button {
+      margin-top: 15px;
+      width: 60px;
+      height: 60px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+
+      background-color: ${(props) => props.theme.palette.tertiary};
       border: none;
-      background: ${(props) => props.theme.palette.tertiary};
       border-radius: 20px;
-      padding: 1rem;
+      transition: filter 0.2s;
+
+      img {
+        width: 22px;
+      }
+
+      :hover {
+        filter: brightness(0.9);
+      }
+    }
+
+    .selectState {
+      width: 80px;
+    }
+    .selectCity {
+      background: #e44449;
+      width: 280px;
     }
   }
 `
-
-export const SelectState = styled.select`
-  border: none;
-`
-
-export const SelectCity = styled.select``
