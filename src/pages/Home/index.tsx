@@ -97,6 +97,7 @@ export function Home() {
           <form onSubmit={handleSearchPets}>
             <span>Busque um amigo:</span>
             <Select
+              id="state"
               name="states"
               className="selectState"
               label=""
@@ -106,6 +107,7 @@ export function Home() {
               }
             />
             <Select
+              id="city"
               disabled={!state.current}
               name="city"
               className="selectCity"
