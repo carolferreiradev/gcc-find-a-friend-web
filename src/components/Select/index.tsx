@@ -17,12 +17,12 @@ type SelectProps = ComponentProps<typeof FilterInput> & {
   }[]
 }
 
-export function Select({ label, name, options }: SelectProps) {
+export function Select({ label, name, options, ...rest }: SelectProps) {
   return (
     <Filter>
       <FilterLabel htmlFor={name}>{label}</FilterLabel>
       <FilterWrapper>
-        <FilterInput name={name} id={name}>
+        <FilterInput name={name} id={name} {...rest}>
           <FilterInputOption value="" disabled selected>
             Selecione
           </FilterInputOption>

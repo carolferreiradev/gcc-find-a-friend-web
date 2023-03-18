@@ -29,8 +29,8 @@ export const FilterInput = styled.select`
   font-size: 16px;
   line-height: 19.2px;
   font-weight: 800;
-  color: #ffffff;
-  background-color: #f75f64;
+  color: ${(props) => props.theme.palette.text};
+  background-color: ${(props) => props.theme.palette.primary500};
   border-radius: 15px;
   border: none;
   outline: none;
@@ -43,7 +43,7 @@ export const FilterInput = styled.select`
     width: 12px;
     height: 6px;
     display: absolute;
-    color: #ffffff;
+    color: ${(props) => props.theme.palette.text};
   }
 `
 
@@ -52,6 +52,6 @@ export const FilterInputOption = styled.option`
   font-size: 14px;
   line-height: 16px;
   font-weight: 500;
-  color: #ffffff;
+  color: ${(props) => props.theme.palette.text};
   padding: 5px 7px;
 `
