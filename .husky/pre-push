@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo 'Checking before push...'
+
+npm run cy:dev ||
+(
+        echo '❌ Test E2E Failed ❌ '
+        false;
+)
+
+echo '✔️ Success... Its push now. ✔️'
