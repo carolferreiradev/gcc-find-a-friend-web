@@ -49,6 +49,9 @@ export function Register() {
 
   async function handleRegisterOrganization(event: FormEvent) {
     event.preventDefault()
+    if (password.current?.value !== passwordConfirm.current?.value) {
+      toast.warning(`A senha e a confirmação devem ser iguais!`)
+    }
 
     const formValues = {
       'Nome do responsável': name.current?.value,
@@ -64,6 +67,8 @@ export function Register() {
 
     if (valuesEmpty.length > 0) {
       toast.warning(`${valuesEmpty} são campos obrigatórios`)
+
+      return
     }
 
     const formData = {

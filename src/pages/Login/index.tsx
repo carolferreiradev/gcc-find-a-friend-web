@@ -57,7 +57,7 @@ export function Login() {
     }
 
     localStorage.setItem('@findAFriend:credential', JSON.stringify(credential))
-    navigate('/')
+    navigate('/dashboard')
   }
 
   function handleRegisterOrganization() {

@@ -3,7 +3,7 @@ import logoImg from '@/assets/icons/logo.svg'
 import { Select } from '@/components/Select'
 import { cityList, statesList } from '@/services'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Banner, Container, Content, Footer, Header, Logo } from './styles'
 
@@ -106,7 +106,13 @@ export function Home() {
         </Banner>
 
         <Footer>
-          <p>Encontre o animal de estimação ideal para seu estilo de vida!</p>
+          <div className="description">
+            <p>Encontre o animal de estimação ideal para seu estilo de vida!</p>
+
+            <Link to="/login">
+              <span>Sou uma ORG</span>
+            </Link>
+          </div>
 
           <form onSubmit={handleSearchPets}>
             <span>Busque um amigo:</span>
