@@ -4,18 +4,13 @@ describe('Pages -> Home', () => {
     cy.visit('/')
 
     cy.get('#state').select('ES')
-    cy.get('#city').select('3205309')
+    cy.get('#city').select('Vitoria')
 
     cy.get('[aria-label="Pesquisar"]')
       .click()
       .then(() => {
         expect(
-          cy
-            .url()
-            .should(
-              'be.equal',
-              'http://127.0.0.1:5173/map?state=ES&city=3205309',
-            ),
+          cy.url().should('be.equal', 'http://127.0.0.1:5173/map?city=Vitoria'),
         )
       })
   })
