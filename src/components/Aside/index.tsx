@@ -4,12 +4,12 @@ import logo from '@/assets/icons/logo.svg'
 import search from '@/assets/icons/search.svg'
 
 import {
-  Container,
-  AsideHeader,
-  HeaderInput,
   AsideContent,
-  ContentHeader,
+  AsideHeader,
+  Container,
   ContentFilters,
+  ContentHeader,
+  HeaderInput,
 } from './styles'
 
 const ageOptions = [

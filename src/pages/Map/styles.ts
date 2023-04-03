@@ -23,7 +23,7 @@ export const Header = styled.div`
     font-size: 20px;
     line-height: 34px;
     font-weight: 400;
-    color: #0d3b66;
+    color: ${(props) => props.theme.palette.secondary};
   }
   span {
     font-weight: 800;
@@ -53,7 +53,7 @@ export const HeaderSelect = styled.select`
 
   font-family: Nunito;
   font-size: 16px;
-  color: #0d3b66;
+  color: ${(props) => props.theme.palette.secondary};
 `
 
 export const Display = styled.div`

@@ -2,9 +2,9 @@ import chevron from '@/assets/icons/chevron-bottom.svg'
 import { ComponentProps } from 'react'
 import {
   Filter,
-  FilterLabel,
   FilterInput,
   FilterInputOption,
+  FilterLabel,
   FilterWrapper,
 } from './styles'
 
