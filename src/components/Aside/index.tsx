@@ -11,79 +11,26 @@ import {
   ContentHeader,
   HeaderInput,
 } from './styles'
+import {
+  ageOptions,
+  energyOptions,
+  independencyOptions,
+  sizeOptions,
+} from '@/utils/values-aside'
+import { ChangeEvent } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
-const ageOptions = [
-  {
-    label: 'Filhote',
-    value: 'cub',
-  },
-  {
-    label: 'Adolescente',
-    value: 'adolescent',
-  },
-  {
-    label: 'Idoso',
-    value: 'elderly',
-  },
-]
-const energyOptions = [
-  {
-    label: 'Muito baixa',
-    value: 1,
-  },
-  {
-    label: 'Baixa',
-    value: 2,
-  },
-  {
-    label: 'Média',
-    value: 3,
-  },
-  {
-    label: 'Alta',
-    value: 4,
-  },
-  {
-    label: 'Muito alta',
-    value: 5,
-  },
-]
-const sizeOptions = [
-  {
-    label: 'Pequenino',
-    value: 'small',
-  },
-  {
-    label: 'Médio',
-    value: 'medium',
-  },
-  {
-    label: 'Grande',
-    value: 'big',
-  },
-]
-const independencyOptions = [
-  {
-    label: 'Baixo',
-    value: 'low',
-  },
-  {
-    label: 'Médio',
-    value: 'medium',
-  },
-  {
-    label: 'Alto',
-    value: 'high',
-  },
-]
+interface Props {
+  defaultValueSearch: string
+}
 
-export function Aside() {
-  function handleSearchPets() {
-    // TO DO
-  }
+export function Aside(props: Props) {
+  const { defaultValueSearch } = props
+  const [params, setParams] = useSearchParams()
 
-  function handleChangeSearchFilters() {
-    // TO DO
+  function handleChangeValueOnSelect(value: string, name: string) {
+    params.set(name, value)
+    setParams(params)
   }
 
   return (
@@ -92,7 +39,11 @@ export function Aside() {
         <div>
           <img src={logo} alt="" />
           <HeaderInput>
-            <input type="text" placeholder="Insira uma cidade" />
+            <input
+              type="text"
+              placeholder="Insira uma cidade"
+              defaultValue={defaultValueSearch}
+            />
             <button>
               <img src={search} alt="ícone de lupa" />
             </button>
@@ -102,20 +53,44 @@ export function Aside() {
       <AsideContent>
         <ContentHeader>Filtros</ContentHeader>
         <ContentFilters>
-          <Select name="age" label="Idade" options={ageOptions} />
+          <Select
+            name="age"
+            label="Idade"
+            options={ageOptions}
+            defaultValue={params.get('age')}
+            onChange={(value: ChangeEvent<HTMLInputElement>) =>
+              handleChangeValueOnSelect(value.target.value, 'age')
+            }
+          />
 
           <Select
             name="energy"
             label="Nível de energia"
             options={energyOptions}
+            defaultValue={params.get('energy')}
+            onChange={(value: ChangeEvent<HTMLInputElement>) =>
+              handleChangeValueOnSelect(value.target.value, 'energy')
+            }
           />
 
-          <Select name="size" label="Porte do animal" options={sizeOptions} />
+          <Select
+            name="size"
+            label="Porte do animal"
+            options={sizeOptions}
+            defaultValue={params.get('size')}
+            onChange={(value: ChangeEvent<HTMLInputElement>) =>
+              handleChangeValueOnSelect(value.target.value, 'size')
+            }
+          />
 
           <Select
             name="independency"
             label="Nível de independência"
             options={independencyOptions}
+            defaultValue={params.get('independency')}
+            onChange={(value: ChangeEvent<HTMLInputElement>) =>
+              handleChangeValueOnSelect(value.target.value, 'independency')
+            }
           />
         </ContentFilters>
       </AsideContent>

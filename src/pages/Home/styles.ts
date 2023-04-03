@@ -82,11 +82,18 @@ export const Footer = styled.footer`
   align-items: center;
   justify-content: space-between;
 
+  .description {
+    a {
+      color: #fff;
+    }
+  }
+
   p {
     width: 450px;
     font-size: ${(props) => props.theme.typography.xMedium};
     line-height: 34px;
     font-weight: 600;
+    margin-bottom: 16px;
   }
 
   form {

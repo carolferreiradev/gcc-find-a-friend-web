@@ -15,7 +15,9 @@ import {
   HeaderSelect,
   SelectWrapper,
 } from './styles'
+import { ChangeEvent, useCallback } from 'react'
 
+const listParams = ['age', 'energy', 'independence', 'size']
 interface Pet {
   age: string
   city: string
@@ -32,24 +34,47 @@ interface Pet {
 }
 
 export function Map() {
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
+
+  function getParamsInRoute() {
+    // eslint-disable-next-line array-callback-return
+    const paramsFilter = listParams
+      .map((param) => {
+        if (params.get(param)) {
+          return `${param}=${params.get(param)}`
+        }
+      })
+      .filter(Boolean)
+      .join('&')
+    return paramsFilter
+  }
+
+  const getListPets = useCallback(() => {
+    const paramsList = getParamsInRoute()
+    const city = params.get('city')
+    if (!city) return
+    const request = petListByCity(city)
+    return fetch(`${request}${paramsList ? `?${paramsList}` : ''}`).then(
+      (res) => res.json(),
+    )
+  }, [params])
 
   const { data, isLoading } = useQuery({
     queryKey: ['petsMap'],
-    queryFn: () => {
-      const request = petListByCity(params.get('city') || '')
-      return fetch(request).then((res) => res.json())
-    },
+    cacheTime: 0,
+    queryFn: getListPets,
   })
 
-  // eslint-disable-next-line no-unused-vars
-  function handleFilterByPetType() {
-    // TO DO
+  function handleChangeValueOnSelect(value: string, name: string) {
+    params.set(name, value)
+    setParams(params)
   }
+
   if (isLoading) return <Loading />
+
   return (
     <Container>
-      <Aside />
+      <Aside defaultValueSearch={params.get('city') || ''} />
 
       <Content>
         <Header>
@@ -57,7 +82,14 @@ export function Map() {
             Encontre <span>{data?.pets.length} amigos</span> na sua cidade
           </p>
           <SelectWrapper>
-            <HeaderSelect name="size" id="size">
+            <HeaderSelect
+              name="size"
+              id="size"
+              defaultValue={params.get('size') || ''}
+              onChange={(value) =>
+                handleChangeValueOnSelect(value.target.value, 'size')
+              }
+            >
               <option value="all">Gatos e Cachorros</option>
               <option value="cats">Gatos</option>
               <option value="dogs">Cachorros</option>
