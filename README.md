@@ -19,10 +19,6 @@ Ao entrar na aplicação, a pessoa adotante pode filtrar os bichinhos de acordo 
 * Styled Components
 * Cypress
 
-
-### Documentação
-<a href="https://efficient-sloth-d85.notion.site/API-FindAFriend-c9275383751f463b8a43137eed9087e8">Documentação do projeto Backend</a>
-
 ### Como rodar o projeto
 
 Após seguir os passos contidos no link da documentação do Backend, clone esse repositório. 
