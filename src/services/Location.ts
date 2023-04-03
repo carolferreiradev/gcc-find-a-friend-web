@@ -1,11 +1,13 @@
 import { API } from '.'
 
-export async function statesList() {
-  const response = await fetch(`${API}/location/states`)
-  return response.json()
+export function statesList() {
+  return `${API}/location/states`
 }
 
-export async function cityList(uf: string) {
-  const response = await fetch(`${API}/location/citys/${uf}`)
-  return response.json()
+export function cityList(uf: string) {
+  return `${API}/location/citys/${uf}`
+}
+
+export function coordinatesByZipCode(cep: string) {
+  return `${API}/location/coordinates/${cep}`
 }

@@ -13,10 +13,10 @@ export const Container = styled.div`
   overflow: hidden;
 
   &:hover {
-    background-color: #0d3b66;
+    background-color: ${(props) => props.theme.palette.secondary};
 
     div {
-      background-color: #0d3b66;
+      background-color: ${(props) => props.theme.palette.secondary};
     }
 
     p {
@@ -65,5 +65,5 @@ export const Name = styled.p`
   line-height: 21.6px;
   font-weight: 700;
   margin: 8px auto 17px;
-  color: #0d3b66;
+  color: ${(props) => props.theme.palette.primary500};
 `
