@@ -110,20 +110,20 @@ export function Register() {
         setCoordinates({} as CoordinatesProps)
         const route = coordinatesByZipCode(cep)
 
-        const response: any = await axios.get(route)
-
-        // if (response.error) {
-        //   toast.error(response.error)
-        //   return
-        // }
+        const { data } = await axios.get(route)
 
         if (address.current) {
-          address.current.value = response.address || ''
+          address.current.value = data.address || ''
         }
-        setCoordinates(response.coordinates)
+        setCoordinates(data.coordinates)
       }
-    } catch (error) {
-      console.log({ error })
+    } catch (error: any) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error)
+        return
+      }
+
+      toast.error('Ocorreu um erro ao tentar buscar coordenadas!')
     } finally {
       setIsLoading(false)
     }
