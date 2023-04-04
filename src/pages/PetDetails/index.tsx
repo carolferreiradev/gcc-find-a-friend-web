@@ -7,6 +7,7 @@ import { Gallery } from '@/components/Gallery'
 import { InformationAboutPet } from '@/components/InformationAboutPet'
 import { coordinatesByZipCode, petDetail } from '@/services'
 import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   AdoptionRequests,
@@ -34,10 +35,10 @@ export function PetDetails() {
     cacheTime: 0,
     queryFn: async () => {
       const request = petDetail(petId || '')
-      const responsePet = await fetch(request).then((res) => res.json())
-      const route = coordinatesByZipCode(responsePet?.pet?.org?.cep)
-      const responseCoord = await fetch(route).then((res) => res.json())
-      return { ...responsePet, coordZip: responseCoord }
+      const { data } = await axios.get(request)
+      const route = coordinatesByZipCode(data?.pet?.org?.cep)
+      const responseCoord = await axios.get(route)
+      return { ...data, coordZip: responseCoord.data }
     },
   })
 

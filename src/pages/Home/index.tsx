@@ -5,7 +5,9 @@ import { cityList, statesList } from '@/services'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 import { Banner, Container, Content, Footer, Header, Logo } from './styles'
+import { Loading } from '@/components/Loading'
 
 interface StatesProps {
   id: number
@@ -24,6 +26,7 @@ interface SelectOptionsProps {
 
 export function Home() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
   const [listStates, setListStates] = useState<SelectOptionsProps[]>([])
   const [listCity, setListCity] = useState<SelectOptionsProps[]>([])
 
@@ -40,24 +43,30 @@ export function Home() {
   }
 
   async function handleChangeState(value: string) {
-    state.current = value
+    try {
+      setIsLoading(true)
+      state.current = value
 
-    const route = cityList(value)
-    const response = await fetch(route)
-      .then((response) => response.json())
-      .catch((err) => err.error)
+      const route = cityList(value)
+      const { data } = await axios.get(route)
 
-    if (response.error) {
-      toast.error(response.error)
-      return
-    }
-    const citys = response.citys.map((city: CityProps) => {
-      return {
-        value: city.name,
-        label: city.name,
+      const citys = data?.citys?.map((city: CityProps) => {
+        return {
+          value: city.name,
+          label: city.name,
+        }
+      })
+      setListCity(citys)
+    } catch (error: any) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error)
+        return
       }
-    })
-    setListCity(citys)
+
+      toast.error('Ocorreu um erro ao tentar buscar cidades!')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   function handleChangeCity(value: string) {
@@ -67,32 +76,34 @@ export function Home() {
   useEffect(() => {
     ;(async () => {
       try {
+        setIsLoading(true)
         const route = statesList()
 
-        const response = await fetch(route)
-          .then((response) => response.json())
-          .catch((err) => err.error)
+        const { data } = await axios(route)
 
-        if (response.error) {
-          toast.error(response.error)
-          return
-        }
-
-        const states = response.states.map((state: StatesProps) => {
+        const states = data?.states?.map((state: StatesProps) => {
           return {
             value: state.sigla,
             label: state.sigla,
           }
         })
         setListStates(states)
-      } catch {
-        toast.error('Ocorreu um erro ao listar os estados!')
+      } catch (error: any) {
+        if (error.response.data.error) {
+          toast.error(error.response.data.error)
+          return
+        }
+
+        toast.error('Ocorreu um erro ao tentar listar estados!')
+      } finally {
+        setIsLoading(false)
       }
     })()
   }, [])
 
   return (
     <Container>
+      {isLoading && <Loading />}
       <Content>
         <Header>
           <Logo>
