@@ -17,6 +17,8 @@ import {
   InputWrapper,
   Wrapper,
 } from './styles'
+import axios from 'axios'
+import { Loading } from '@/components/Loading'
 
 interface CoordinatesProps {
   latitude: number
@@ -34,6 +36,7 @@ function getAllEmptyFields(value: {}) {
 }
 
 export function Register() {
+  const [isLoading, setIsLoading] = useState(false)
   const name = useRef<HTMLInputElement>(null)
   const email = useRef<HTMLInputElement>(null)
   const whatsappNumber = useRef<HTMLInputElement>(null)
@@ -49,75 +52,80 @@ export function Register() {
 
   async function handleRegisterOrganization(event: FormEvent) {
     event.preventDefault()
-    if (password.current?.value !== passwordConfirm.current?.value) {
-      toast.warning(`A senha e a confirmação devem ser iguais!`)
-    }
+    try {
+      setIsLoading(true)
+      if (password.current?.value !== passwordConfirm.current?.value) {
+        toast.warning(`A senha e a confirmação devem ser iguais!`)
+      }
 
-    const formValues = {
-      'Nome do responsável': name.current?.value,
-      Email: email.current?.value,
-      WhatsApp: whatsappNumber.current?.value,
-      Senha: password.current?.value,
-      'Confirmar senha': passwordConfirm.current?.value,
-      Endereço: address.current?.value,
-      CEP: cep,
-    }
+      const formValues = {
+        'Nome do responsável': name.current?.value,
+        Email: email.current?.value,
+        WhatsApp: whatsappNumber.current?.value,
+        Senha: password.current?.value,
+        'Confirmar senha': passwordConfirm.current?.value,
+        Endereço: address.current?.value,
+        CEP: cep,
+      }
 
-    const valuesEmpty = getAllEmptyFields(formValues)
+      const valuesEmpty = getAllEmptyFields(formValues)
 
-    if (valuesEmpty.length > 0) {
-      toast.warning(`${valuesEmpty} são campos obrigatórios`)
+      if (valuesEmpty.length > 0) {
+        toast.warning(`${valuesEmpty} são campos obrigatórios`)
 
-      return
-    }
-
-    const formData = {
-      name: name.current?.value,
-      email: email.current?.value,
-      whatsappNumber: whatsappNumber.current?.value,
-      password: password.current?.value,
-      passwordConfirm: passwordConfirm.current?.value,
-      address: address.current?.value,
-      cep,
-    }
-
-    const route = createORG()
-    const response = await fetch(route, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .catch((err) => err.error)
-
-    if (response.error) {
-      toast.error(response.error)
-      return
-    }
-    toast.warning(`ORG Criado com sucesso!`)
-    navigate('/login')
-  }
-
-  async function handleRenderMapLocation() {
-    if (cep.length === 9) {
-      setCoordinates({} as CoordinatesProps)
-      const route = coordinatesByZipCode(cep)
-
-      const response = await fetch(route)
-        .then((response) => response.json())
-        .catch((err) => err.error)
-
-      if (response.error) {
-        toast.error(response.error)
         return
       }
 
-      if (address.current) {
-        address.current.value = response.address || ''
+      const formData = {
+        name: name.current?.value,
+        email: email.current?.value,
+        whatsappNumber: whatsappNumber.current?.value,
+        password: password.current?.value,
+        passwordConfirm: passwordConfirm.current?.value,
+        address: address.current?.value,
+        cep,
       }
-      setCoordinates(response.coordinates)
+
+      const route = createORG()
+      await axios.post(route, formData)
+
+      toast.success(`ORG Criado com sucesso!`)
+      navigate('/login')
+    } catch (error: any) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error)
+        return
+      }
+
+      toast.error('Ocorreu um erro ao tentar cadastrar a ORG!')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleRenderMapLocation() {
+    try {
+      setIsLoading(true)
+      if (cep.length === 9) {
+        setCoordinates({} as CoordinatesProps)
+        const route = coordinatesByZipCode(cep)
+
+        const response: any = await axios.get(route)
+
+        // if (response.error) {
+        //   toast.error(response.error)
+        //   return
+        // }
+
+        if (address.current) {
+          address.current.value = response.address || ''
+        }
+        setCoordinates(response.coordinates)
+      }
+    } catch (error) {
+      console.log({ error })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -135,6 +143,7 @@ export function Register() {
 
   return (
     <Wrapper>
+      {isLoading && <Loading />}
       <Container>
         <Card>
           <img src={LogoHorizontal} className="logo" alt="" />

@@ -6,6 +6,7 @@ import chevron from '@/assets/icons/chevron-bottom-blue.svg'
 import { Loading } from '@/components/Loading'
 import { petListByCity } from '@/services'
 import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   Container,
@@ -15,7 +16,7 @@ import {
   HeaderSelect,
   SelectWrapper,
 } from './styles'
-import { ChangeEvent, useCallback } from 'react'
+import { useCallback } from 'react'
 
 const listParams = ['age', 'energy', 'independence', 'size']
 interface Pet {
@@ -49,14 +50,16 @@ export function Map() {
     return paramsFilter
   }
 
-  const getListPets = useCallback(() => {
+  const getListPets = useCallback(async () => {
     const paramsList = getParamsInRoute()
     const city = params.get('city')
     if (!city) return
+
     const request = petListByCity(city)
-    return fetch(`${request}${paramsList ? `?${paramsList}` : ''}`).then(
-      (res) => res.json(),
+    const response = await axios.get(
+      `${request}${paramsList ? `?${paramsList}` : ''}`,
     )
+    return response.data
   }, [params])
 
   const { data, isLoading } = useQuery({

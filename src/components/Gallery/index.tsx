@@ -1,4 +1,5 @@
 import { petGallery } from '@/services'
+import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Container, CurrentImage, GalleryContainer, Miniature } from './styles'
@@ -18,11 +19,13 @@ export function Gallery(props: Props) {
 
   const { data } = useQuery({
     queryKey: ['petsGallery'],
-    queryFn: () => {
+    queryFn: async () => {
       const request = petGallery(petId || '')
-      return fetch(request).then((res) => res.json())
+      const response = await axios.get(request)
+      return response.data
     },
   })
+
   const [isImageCurrent, setIsImageCurrent] = useState('')
 
   useEffect(() => {

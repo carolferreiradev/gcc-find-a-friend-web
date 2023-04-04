@@ -8,7 +8,6 @@ import {
   InputWrapper,
   Wrapper,
 } from './styles'
-
 import LogoHorizontal from '@/assets/icons/logo-horizontal.svg'
 import Eye from '@/assets/icons/password-eye.svg'
 import Pets from '@/assets/icons/pets.svg'
@@ -16,48 +15,53 @@ import { loginSession } from '@/services'
 import { FormEvent, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import axios from 'axios'
+import { Loading } from '@/components/Loading'
 
 export function Login() {
   const navigate = useNavigate()
   const email = useRef<HTMLInputElement>(null)
   const password = useRef<HTMLInputElement>(null)
   const [typeInputPassword, setTypeInputPassword] = useState('password')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault()
+    try {
+      setIsLoading(true)
+      if (!email.current?.value || !password.current?.value) {
+        toast.warning('Email e senha são campos obrigatórios')
+        return
+      }
 
-    if (!email.current?.value || !password.current?.value) {
-      toast.warning('Email e senha são campos obrigatórios')
-      return
+      const formData = {
+        email: email.current.value,
+        password: password.current.value,
+      }
+
+      const route = loginSession()
+      const { data } = await axios.post(route, formData)
+
+      const credential = {
+        token: data?.token,
+        name: data?.org?.nome,
+      }
+
+      localStorage.setItem(
+        '@findAFriend:credential',
+        JSON.stringify(credential),
+      )
+      navigate('/dashboard')
+    } catch (error: any) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error)
+        return
+      }
+
+      toast.error('Ocorreu um erro ao tentar efetuar login!')
+    } finally {
+      setIsLoading(false)
     }
-
-    const formData = {
-      email: email.current.value,
-      password: password.current.value,
-    }
-
-    const route = loginSession()
-    const response = await fetch(route, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .catch((err) => err.error)
-
-    if (response.error) {
-      toast.error(response.error)
-      return
-    }
-    const credential = {
-      token: response?.token,
-      name: response?.org?.nome,
-    }
-
-    localStorage.setItem('@findAFriend:credential', JSON.stringify(credential))
-    navigate('/dashboard')
   }
 
   function handleRegisterOrganization() {
@@ -72,6 +76,7 @@ export function Login() {
 
   return (
     <Wrapper>
+      {isLoading && <Loading />}
       <Container>
         <Card>
           <img src={LogoHorizontal} className="logo" alt="" />
