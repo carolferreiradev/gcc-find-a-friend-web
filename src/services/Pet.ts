@@ -15,3 +15,7 @@ export function petGallery(petId: string) {
 export function petAdoptionRequirements(petId: string) {
   return `${API}/pets/adoption-requirements/${petId}`
 }
+
+export function createPet() {
+  return `${API}/pets`
+}

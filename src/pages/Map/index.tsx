@@ -5,7 +5,6 @@ import chevron from '@/assets/icons/chevron-bottom-blue.svg'
 
 import { Loading } from '@/components/Loading'
 import { petListByCity } from '@/services'
-import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
@@ -16,7 +15,8 @@ import {
   HeaderSelect,
   SelectWrapper,
 } from './styles'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const listParams = ['age', 'energy', 'independence', 'size']
 interface Pet {
@@ -36,10 +36,13 @@ interface Pet {
 
 export function Map() {
   const [params, setParams] = useSearchParams()
+  const [listPets, setListPets] = useState<Pet[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   function getParamsInRoute() {
     // eslint-disable-next-line array-callback-return
     const paramsFilter = listParams
+      // eslint-disable-next-line array-callback-return
       .map((param) => {
         if (params.get(param)) {
           return `${param}=${params.get(param)}`
@@ -51,27 +54,32 @@ export function Map() {
   }
 
   const getListPets = useCallback(async () => {
-    const paramsList = getParamsInRoute()
-    const city = params.get('city')
-    if (!city) return
+    try {
+      setIsLoading(true)
+      const paramsList = getParamsInRoute()
+      const city = params.get('city')
+      if (!city) return
 
-    const request = petListByCity(city)
-    const response = await axios.get(
-      `${request}${paramsList ? `?${paramsList}` : ''}`,
-    )
-    return response.data
+      const request = petListByCity(city)
+      const response = await axios.get(
+        `${request}${paramsList ? `?${paramsList}` : ''}`,
+      )
+      setListPets(response.data?.pets)
+    } catch (error) {
+      toast.error('Ocorreu um erro ao listar os pets')
+    } finally {
+      setIsLoading(false)
+    }
   }, [params])
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['petsMap'],
-    cacheTime: 0,
-    queryFn: getListPets,
-  })
 
   function handleChangeValueOnSelect(value: string, name: string) {
     params.set(name, value)
     setParams(params)
   }
+
+  useEffect(() => {
+    getListPets()
+  }, [getListPets])
 
   if (isLoading) return <Loading />
 
@@ -82,7 +90,7 @@ export function Map() {
       <Content>
         <Header>
           <p>
-            Encontre <span>{data?.pets.length} amigos</span> na sua cidade
+            Encontre <span>{listPets.length} amigos</span> na sua cidade
           </p>
           <SelectWrapper>
             <HeaderSelect
@@ -101,7 +109,7 @@ export function Map() {
           </SelectWrapper>
         </Header>
         <Display>
-          {data?.pets.map((pet: Pet) => (
+          {listPets.map((pet: Pet) => (
             <Link to={`/pet-details/${pet.id}`} key={pet.id}>
               <Card
                 path={pet.photo_url}

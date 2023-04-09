@@ -21,6 +21,10 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
+  textarea:focus, select:focus, input:focus{
+    outline: none;
+}
+
   button {
     cursor: pointer;
   }

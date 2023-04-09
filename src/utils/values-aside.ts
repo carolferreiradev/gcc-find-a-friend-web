@@ -62,3 +62,17 @@ export const independencyOptions = [
     value: 'high',
   },
 ]
+export const environmentOptions = [
+  {
+    label: 'Ambiente pequeno',
+    value: 'small',
+  },
+  {
+    label: 'Ambiente médio',
+    value: 'medium',
+  },
+  {
+    label: 'Ambiente amplo',
+    value: 'big',
+  },
+]
