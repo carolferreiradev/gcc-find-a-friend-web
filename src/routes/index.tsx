@@ -11,16 +11,19 @@ import { Route, Routes } from 'react-router-dom'
 
 export function Router() {
   const { isAuthenticated } = useAuth()
+
   return (
     <Routes>
       <Route path="*" element={<NotFound404 />} />
-      <Route path="/" element={<Home />} />
+      {!isAuthenticated && <Route path="/" element={<Home />} />}
+      {!isAuthenticated && (
+        <Route path="/pet-details/:petId" element={<PetDetails />} />
+      )}
+      {!isAuthenticated && <Route path="/map" element={<Map />} />}
       {!isAuthenticated && <Route path="/login" element={<Login />} />}
       {!isAuthenticated && <Route path="/Register" element={<Register />} />}
-      {isAuthenticated && <Route path="/dashboard" element={<Dashboard />} />}
+      {isAuthenticated && <Route path="/" element={<Dashboard />} />}
       {isAuthenticated && <Route path="/create-pet" element={<PetCreate />} />}
-      <Route path="/map" element={<Map />} />
-      <Route path="/pet-details/:petId" element={<PetDetails />} />
     </Routes>
   )
 }

@@ -62,6 +62,20 @@ export const independencyOptions = [
     value: 'high',
   },
 ]
+export const typeOptions = [
+  {
+    label: 'Gato',
+    value: 'cat',
+  },
+  {
+    label: 'Cachorro',
+    value: 'dog',
+  },
+  {
+    label: 'Pássaro',
+    value: 'bird',
+  },
+]
 export const environmentOptions = [
   {
     label: 'Ambiente pequeno',

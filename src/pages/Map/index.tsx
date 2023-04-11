@@ -5,7 +5,6 @@ import chevron from '@/assets/icons/chevron-bottom-blue.svg'
 
 import { Loading } from '@/components/Loading'
 import { petListByCity } from '@/services'
-import axios from 'axios'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   Container,
@@ -17,6 +16,7 @@ import {
 } from './styles'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { publicRequest } from '@/auth/axios'
 
 const listParams = ['age', 'energy', 'independence', 'size']
 interface Pet {
@@ -61,7 +61,7 @@ export function Map() {
       if (!city) return
 
       const request = petListByCity(city)
-      const response = await axios.get(
+      const response = await publicRequest.get(
         `${request}${paramsList ? `?${paramsList}` : ''}`,
       )
       setListPets(response.data?.pets)

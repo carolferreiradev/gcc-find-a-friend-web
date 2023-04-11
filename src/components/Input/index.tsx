@@ -1,10 +1,10 @@
 import { HTMLAttributes } from 'react'
 import { Container } from './styles'
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import { UseFormRegister } from 'react-hook-form'
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
   label: string
-  register: UseFormRegister<FieldValues>
+  register: UseFormRegister<any>
   name: string
   errorMessage: any
 }

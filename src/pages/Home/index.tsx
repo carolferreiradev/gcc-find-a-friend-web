@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { Banner, Container, Content, Footer, Header, Logo } from './styles'
 import { Loading } from '@/components/Loading'
+import { publicRequest } from '@/auth/axios'
 
 interface StatesProps {
   id: number
@@ -48,7 +49,7 @@ export function Home() {
       state.current = value
 
       const route = cityList(value)
-      const { data } = await axios.get(route)
+      const { data } = await publicRequest.get(route)
 
       const citys = data?.citys?.map((city: CityProps) => {
         return {

@@ -1,17 +1,10 @@
 import arrowIcon from '@/assets/icons/arrow.svg'
 import logoIcon from '@/assets/icons/logo-icon.svg'
 import { useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import {
-  Button,
-  ButtonPlus,
-  Container,
-  Content,
-  Divider,
-  Sidebar,
-} from './styles'
+import { Button, Container, Content, Divider, Sidebar } from './styles'
 import { Input } from '@/components/Input'
 import { SelectForm } from '@/components/SelectForm'
 import {
@@ -20,21 +13,17 @@ import {
   environmentOptions,
   independencyOptions,
   sizeOptions,
+  typeOptions,
 } from '@/utils/values-aside'
 import { TextArea } from '@/components/TextArea'
-
-// eslint-disable-next-line no-unused-vars
-interface CreatePetProps {
-  name: string
-  age: string
-  description: string
-  energy: string
-  independence: string
-  size: string
-  type: string
-  adoptionRequirements: string[]
-  images: string
-}
+import { InputFile } from '@/components/InputFile'
+import { InputMultiple } from '@/components/InputMultiple'
+import { CreatePetProps } from '@/types/create-pet'
+import { useState } from 'react'
+import { createPet } from '@/services'
+import { toast } from 'react-toastify'
+import { Loading } from '@/components/Loading'
+import { authRequest } from '@/auth/axios'
 
 const schema = z.object({
   name: z
@@ -65,31 +54,78 @@ const schema = z.object({
     .string({ required_error: 'Campo obrigatório' })
     .min(1, { message: 'Campo obrigatório' }),
   adoptionRequirements: z
-    .string({ required_error: 'Campo obrigatório' })
-    .min(1, { message: 'Campo obrigatório' }),
+    .string({
+      required_error: 'Campo obrigatório',
+    })
+    .array()
+    .nonempty({
+      message: 'Campo obrigatório',
+    })
+    .min(1, { message: 'Necessário ao menos um requisito' }),
   images: z
-    .string({ required_error: 'Campo obrigatório' })
-    .min(1, { message: 'Campo obrigatório' }),
+    .any({ required_error: 'Campo obrigatório' })
+    .array()
+    .nonempty({
+      message: 'Campo obrigatório',
+    })
+    .min(1, { message: 'Necessário ao menos uma imagem' })
+    .max(6, { message: 'Máximo de 5 imagens permitidas' }),
 })
 
 export function PetCreate() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     register,
+    setValue,
     handleSubmit,
+    getValues,
     formState: { errors },
-  } = useForm({
+  } = useForm<CreatePetProps>({
     resolver: zodResolver(schema),
     mode: 'all',
   })
-  console.log(errors)
-  async function handleCreatePet(values: any) {
-    console.log(values)
+  const handleCreatePet: SubmitHandler<CreatePetProps> = async (data) => {
+    try {
+      setIsLoading(true)
+      const formData = new FormData()
+
+      formData.append('name', data.name)
+      formData.append('age', data.age)
+      formData.append('size', data.size)
+      formData.append('description', data.description)
+      formData.append('energy', data.energy)
+      formData.append('independence', data.independence)
+      formData.append('type', data.type)
+      formData.append(
+        'adoptionRequirements',
+        JSON.stringify(JSON.stringify(data.adoptionRequirements)),
+      )
+      data.images.forEach((image) => {
+        formData.append('images', image!)
+      })
+
+      const url = createPet()
+      await authRequest.post(url, formData)
+
+      toast.success('Pet cadastrado com sucesso')
+      navigate('/')
+    } catch (error: any) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error)
+        return
+      }
+
+      toast.error('Ocorreu um erro ao tentar cadastrar o pet!')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <Container>
+      {isLoading && <Loading />}
       <Sidebar>
         <img src={logoIcon} alt="" />
         <button onClick={() => navigate(-1)}>
@@ -149,22 +185,39 @@ export function PetCreate() {
 
             <SelectForm
               register={register}
+              name="type"
+              errorMessage={errors.type?.message}
+              label="Tipo"
+              options={typeOptions}
+            />
+
+            <SelectForm
+              register={register}
               name="environment"
               errorMessage={errors.environment?.message}
               label="Ambiente"
               options={environmentOptions}
             />
+
+            <InputFile
+              register={register}
+              setValue={setValue}
+              name="images"
+              errorMessage={errors.images?.message}
+              label="Fotos"
+            />
           </div>
           <h2>Requisitos para adoção</h2>
           <Divider />
-          <Input
-            register={register}
+
+          <InputMultiple
             name="adoptionRequirements"
             errorMessage={errors.adoptionRequirements?.message}
-            label="Requisito"
-            placeholder="Defina um requisito"
+            label="Requisitos"
+            setValue={setValue}
+            getValues={getValues}
           />
-          <ButtonPlus type="button"> + </ButtonPlus>
+
           <Button type="submit">Confirmar</Button>
         </form>
       </Content>

@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLTextAreaElement> {
     main: string
     sub?: string
   }
-  register: UseFormRegister<FieldValues>
+  register: UseFormRegister<CreatePetProps>
   name: string
   errorMessage: any
 }

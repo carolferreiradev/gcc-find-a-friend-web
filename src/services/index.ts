@@ -9,8 +9,6 @@ import {
   createPet,
 } from '@/services/Pet'
 
-export const API = import.meta.env.VITE_API_URL
-
 export {
   statesList,
   cityList,

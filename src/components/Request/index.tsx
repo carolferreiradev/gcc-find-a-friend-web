@@ -1,8 +1,8 @@
 import { Alert } from '@/components/Alert'
-import axios from 'axios'
 import { petAdoptionRequirements } from '@/services'
 import { useQuery } from '@tanstack/react-query'
 import { Container } from './styles'
+import { publicRequest } from '@/auth/axios'
 
 interface Props {
   petId: string
@@ -20,7 +20,7 @@ export function Request(props: Props) {
     queryKey: ['adoptionRequirementsComp'],
     queryFn: async () => {
       const request = petAdoptionRequirements(petId || '')
-      const response = await axios.get(request)
+      const response = await publicRequest.get(request)
       return response.data
     },
   })

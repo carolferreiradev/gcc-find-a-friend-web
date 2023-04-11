@@ -1,8 +1,8 @@
 import { petGallery } from '@/services'
-import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Container, CurrentImage, GalleryContainer, Miniature } from './styles'
+import { publicRequest } from '@/auth/axios'
 
 interface Props {
   petId: string
@@ -21,7 +21,7 @@ export function Gallery(props: Props) {
     queryKey: ['petsGallery'],
     queryFn: async () => {
       const request = petGallery(petId || '')
-      const response = await axios.get(request)
+      const response = await publicRequest.get(request)
       return response.data
     },
   })

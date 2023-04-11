@@ -66,22 +66,6 @@ export const Divider = styled.div`
   width: 100%;
   margin: 24px 0;
 `
-
-export const ButtonPlus = styled.button`
-  background: rgba(252, 134, 134, 0.1);
-  border: 1px dashed #e44449;
-  color: #e44449;
-  border-radius: 10px;
-  width: 100%;
-  padding: 12px;
-  font-weight: 800;
-  transition: filter 0.2s;
-
-  &:hover {
-    filter: brightness(0.9);
-  }
-`
-
 export const Button = styled.button`
   background: #f4d35e;
   margin-top: 80px;
