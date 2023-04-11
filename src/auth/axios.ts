@@ -49,7 +49,16 @@ authRequest.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedRequests.push({
             onSuccess: (token: string) => {
-              localStorage.setItem('@findAFriend:credential', token)
+              const credential = {
+                token,
+                name: accessToken ? JSON.parse(accessToken).name : '',
+              }
+
+              localStorage.setItem(
+                '@findAFriend:credential',
+                JSON.stringify(credential),
+              )
+
               originalConfig.headers.Authorization = `Bearer ${token}`
 
               resolve(authRequest(originalConfig))
