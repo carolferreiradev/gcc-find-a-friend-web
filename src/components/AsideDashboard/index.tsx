@@ -22,13 +22,7 @@ export function AsideDashboard() {
         <ContentFilters>
           <ul>
             <li>
-              <Link to="/list-pet">Listagem de Pets</Link>
-            </li>
-            <li>
               <Link to="/create-pet">Cadastrar Pet</Link>
-            </li>
-            <li>
-              <Link to="/my-data">Meus Dados</Link>
             </li>
           </ul>
         </ContentFilters>
