@@ -1,13 +1,11 @@
-import { API } from '.'
-
 export function statesList() {
-  return `${API}/location/states`
+  return `/location/states`
 }
 
 export function cityList(uf: string) {
-  return `${API}/location/citys/${uf}`
+  return `/location/citys/${uf}`
 }
 
 export function coordinatesByZipCode(cep: string) {
-  return `${API}/location/coordinates/${cep}`
+  return `/location/coordinates/${cep}`
 }

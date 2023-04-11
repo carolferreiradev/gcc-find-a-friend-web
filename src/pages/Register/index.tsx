@@ -17,8 +17,8 @@ import {
   InputWrapper,
   Wrapper,
 } from './styles'
-import axios from 'axios'
 import { Loading } from '@/components/Loading'
+import { publicRequest } from '@/auth/axios'
 
 interface CoordinatesProps {
   latitude: number
@@ -87,7 +87,7 @@ export function Register() {
       }
 
       const route = createORG()
-      await axios.post(route, formData)
+      await publicRequest.post(route, formData)
 
       toast.success(`ORG Criado com sucesso!`)
       navigate('/login')
@@ -110,7 +110,7 @@ export function Register() {
         setCoordinates({} as CoordinatesProps)
         const route = coordinatesByZipCode(cep)
 
-        const { data } = await axios.get(route)
+        const { data } = await publicRequest.get(route)
 
         if (address.current) {
           address.current.value = data.address || ''

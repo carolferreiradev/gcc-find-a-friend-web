@@ -1,4 +1,4 @@
-import { loginSession } from '@/services/Auth'
+import { loginSession, refreshToken } from '@/services/Auth'
 import { cityList, coordinatesByZipCode, statesList } from '@/services/Location'
 import { createORG } from '@/services/ORG'
 import {
@@ -6,9 +6,8 @@ import {
   petDetail,
   petGallery,
   petListByCity,
+  createPet,
 } from '@/services/Pet'
-
-export const API = import.meta.env.VITE_API_URL
 
 export {
   statesList,
@@ -20,5 +19,6 @@ export {
   petListByCity,
   loginSession,
   coordinatesByZipCode,
+  refreshToken,
+  createPet,
 }
-

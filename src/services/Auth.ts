@@ -1,5 +1,6 @@
-import { API } from '.'
-
 export function loginSession() {
-  return `${API}/auth/sessions`
+  return `/auth/sessions`
+}
+export function refreshToken() {
+  return `/auth/refresh-token`
 }

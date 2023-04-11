@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const Container = styled.div`
   background: #fdeced;
   min-height: 100vh;
+
   display: flex;
 `
 
@@ -37,6 +38,8 @@ export const Content = styled.div`
   margin: 0 auto;
   margin-top: 100px;
   width: 700px;
+  max-height: 78vh;
+  overflow-y: auto;
   margin-bottom: 100px;
   background-color: #ffffff;
   border-radius: 20px;

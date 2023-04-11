@@ -15,8 +15,8 @@ import { loginSession } from '@/services'
 import { FormEvent, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { Loading } from '@/components/Loading'
+import { publicRequest } from '@/auth/axios'
 
 export function Login() {
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ export function Login() {
       }
 
       const route = loginSession()
-      const { data } = await axios.post(route, formData)
+      const { data } = await publicRequest.post(route, formData)
 
       const credential = {
         token: data?.token,
@@ -51,7 +51,7 @@ export function Login() {
         '@findAFriend:credential',
         JSON.stringify(credential),
       )
-      navigate('/dashboard')
+      navigate('/')
     } catch (error: any) {
       if (error.response.data.error) {
         toast.error(error.response.data.error)
