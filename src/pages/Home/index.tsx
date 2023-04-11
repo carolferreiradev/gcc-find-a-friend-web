@@ -5,7 +5,6 @@ import { cityList, statesList } from '@/services'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { Banner, Container, Content, Footer, Header, Logo } from './styles'
 import { Loading } from '@/components/Loading'
 import { publicRequest } from '@/auth/axios'
@@ -80,7 +79,7 @@ export function Home() {
         setIsLoading(true)
         const route = statesList()
 
-        const { data } = await axios(route)
+        const { data } = await publicRequest(route)
 
         const states = data?.states?.map((state: StatesProps) => {
           return {
@@ -94,7 +93,7 @@ export function Home() {
           toast.error(error.response.data.error)
           return
         }
-
+        console.log(error)
         toast.error('Ocorreu um erro ao tentar listar estados!')
       } finally {
         setIsLoading(false)
