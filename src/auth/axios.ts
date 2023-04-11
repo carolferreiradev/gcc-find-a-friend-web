@@ -77,22 +77,4 @@ authRequest.interceptors.response.use(
   },
 )
 
-// authRequest.interceptors.request.use(async (config: any) => {
-//   try {
-//     const { data } = await authRequest.patch(`/auth/refresh-token`)
-
-//     if (data.token) {
-//       config.headers = {
-//         ...config.headers,
-//         Authorization: `Bearer ${data.token}`,
-//       }
-//     }
-
-//     return config
-//   } catch (error: any) {
-//     toast.error(error.response.data.error)
-//     Promise.reject(error)
-//   }
-// })
-
 export { authRequest, publicRequest }
